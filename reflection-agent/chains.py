@@ -27,9 +27,7 @@ generation_prompt = ChatPromptTemplate.from_messages(
     ]
 )
 
-llm = AzureChatOpenAI(
-    max_tokens=100
-)
+llm = AzureChatOpenAI(max_tokens=100)
 
 generate_chain = generation_prompt | llm
 reflect_chain = reflection_prompt | llm
