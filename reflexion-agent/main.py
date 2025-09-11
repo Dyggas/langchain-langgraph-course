@@ -5,7 +5,7 @@ load_dotenv()
 from typing import Annotated, TypedDict
 
 from chains import first_responder, revisor
-from langchain_core.messages import ToolMessage
+from langchain_core.messages import HumanMessage, ToolMessage
 from langgraph.graph import END, StateGraph
 from langgraph.graph.message import add_messages
 from tool_executor import execute_tools
@@ -23,15 +23,16 @@ class State(TypedDict):
 
 
 def first_responder_node(state: State):
-    return first_responder.invoke({"messages": state["messages"]})
+    response = first_responder.invoke({"messages": state["messages"]})
+    return {"messages": [response]}
 
 
 def execute_tools_node(state: State):
-    return execute_tools.invoke({"messages": state["messages"]})
+    return execute_tools.invoke(state["messages"])
 
 
 def revise_node(state: State):
-    return revisor.invoke({"messages": state["messages"]})
+    return {"messages": [revisor.invoke(state["messages"])]}
 
 
 builder = StateGraph(State)
@@ -61,6 +62,16 @@ builder.add_conditional_edges(
 graph = builder.compile()
 
 print(graph.get_graph().draw_ascii())
+graph.get_graph().draw_mermaid_png(output_file_path="graph.png")
 
 if __name__ == "__main__":
     print("Hello World")
+    inputs = HumanMessage(content=(
+        "Write about the struggles of junior developers trying to find a job."
+    ))
+    initial_state: State = {"messages": [inputs]}
+    response = graph.invoke(initial_state)
+    with open('response.txt', 'w', encoding="utf8") as f:
+        print(response["messages"], file=f)
+        print('-' * 20 + ' Last Message ' + '-' * 20, file=f)
+        print(response["messages"][-1], file=f)
