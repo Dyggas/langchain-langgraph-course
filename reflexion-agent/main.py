@@ -1,12 +1,10 @@
+from typing import Annotated, TypedDict
+
+from chains import first_responder, revisor
 from dotenv import load_dotenv
-
-from typing import TypedDict, Annotated
-
 from langchain_core.messages import ToolMessage
 from langgraph.graph import END, StateGraph
 from langgraph.graph.message import add_messages
-
-from chains import revisor, first_responder
 from tool_executor import execute_tools
 
 load_dotenv()

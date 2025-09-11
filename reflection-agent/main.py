@@ -1,15 +1,13 @@
 from typing import Annotated, TypedDict
 
+from dotenv import load_dotenv
 from langchain_core.messages import HumanMessage
 from langgraph.graph import END, StateGraph
 from langgraph.graph.message import add_messages
 
-from dotenv import load_dotenv
-
 load_dotenv()
 
 from chains import generate_chain, reflect_chain
-
 
 REFLECT = "reflect"
 GENERATE = "generate"

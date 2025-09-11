@@ -1,15 +1,10 @@
 import datetime
 
-from langchain_core.output_parsers.openai_tools import (
-    JsonOutputToolsParser,
-    PydanticToolsParser,
-)
-
+from langchain_core.output_parsers.openai_tools import (JsonOutputToolsParser,
+                                                        PydanticToolsParser)
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 from langchain_openai import AzureChatOpenAI
-
 from schemas import AnswerQuestion, ReviseAnswer
-
 
 llm = AzureChatOpenAI()
 parser = JsonOutputToolsParser(return_id=True)
