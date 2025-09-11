@@ -1,13 +1,15 @@
+from dotenv import load_dotenv
+
+load_dotenv()
+
 from typing import Annotated, TypedDict
 
 from chains import first_responder, revisor
-from dotenv import load_dotenv
 from langchain_core.messages import ToolMessage
 from langgraph.graph import END, StateGraph
 from langgraph.graph.message import add_messages
 from tool_executor import execute_tools
 
-load_dotenv()
 
 MAX_ITERATIONS = 2
 
