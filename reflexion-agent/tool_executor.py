@@ -16,7 +16,11 @@ def run_queries(search_queries: list[str], **kwargs):
 
 execute_tools = ToolNode(
     [
-        StructuredTool.from_function(run_queries, name=AnswerQuestion.__name__),
-        StructuredTool.from_function(run_queries, name=ReviseAnswer.__name__),
+        StructuredTool.from_function(
+            run_queries, name=AnswerQuestion.__name__
+        ),
+        StructuredTool.from_function(
+            run_queries, name=ReviseAnswer.__name__
+        ),
     ]
 )
