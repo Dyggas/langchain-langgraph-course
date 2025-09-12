@@ -28,11 +28,11 @@ def first_responder_node(state: State):
 
 
 def execute_tools_node(state: State):
-    return execute_tools.invoke(state["messages"])
+    return execute_tools.invoke(state)
 
 
 def revise_node(state: State):
-    return {"messages": [revisor.invoke(state["messages"])]}
+    return {"messages": [revisor.invoke({"messages": state["messages"]})]}
 
 
 builder = StateGraph(State)
