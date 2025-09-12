@@ -1,8 +1,13 @@
 # Byte-compiled / optimized / DLL files
 __pycache__/
 
+# IDE files
 .vscode
 
+# Output files
+response.txt
+
+# Environment files
 .env
 .venv
 *settings.json
