@@ -9,21 +9,23 @@ load_dotenv()
 tavily_tool = TavilySearch(max_results=5)
 
 
-def run_queries(search_queries: list[str], **kwargs):
-    """Run the generated queries."""
-    # description could also be supplied by @tool's description field
+def run_answer_queries(answer: str, reflection: dict, search_queries: list[str]):
+    """Run queries for AnswerQuestion tool."""
     return tavily_tool.batch([{"query": query} for query in search_queries])
 
+def run_revise_queries(answer: str, reflection: dict, search_queries: list[str], references: list[str]):
+    """Run queries for ReviseAnswer tool."""
+    return tavily_tool.batch([{"query": query} for query in search_queries])
 
-execute_tools = ToolNode(
-    [
-        StructuredTool.from_function(
-            run_queries, name=AnswerQuestion.__name__,
-            args_schema=AnswerQuestion
-        ),
-        StructuredTool.from_function(
-            run_queries, name=ReviseAnswer.__name__,
-            args_schema=ReviseAnswer
-        ),
-    ]
-)
+execute_tools = ToolNode([
+    StructuredTool.from_function(
+        run_answer_queries, 
+        name=AnswerQuestion.__name__,
+        args_schema=AnswerQuestion
+    ),
+    StructuredTool.from_function(
+        run_revise_queries, 
+        name=ReviseAnswer.__name__,
+        args_schema=ReviseAnswer
+    ),
+])
