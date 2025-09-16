@@ -33,5 +33,5 @@ class ReviseAnswer(BaseModel):
         "address the critique of your current answer."
     )
     references: List[str] = Field(
-        description="Citations motivating your updated answer."
+        description="REQUIRED: Citations motivating your updated answer."
     )

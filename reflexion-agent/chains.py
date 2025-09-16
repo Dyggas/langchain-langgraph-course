@@ -47,6 +47,8 @@ revise_instructions = """Revise your previous answer using the new information.
             - [1] https://example.com
             - [2] https://example.com
     - You should use the previous critique to remove superfluous information from your answer and make SURE it is not more than 250 words.
+
+    IMPORTANT: You MUST provide references. Always include a references list in your response.
 """
 
 revisor = actor_prompt_template.partial(
