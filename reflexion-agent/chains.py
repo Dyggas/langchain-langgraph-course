@@ -40,15 +40,24 @@ first_responder = first_responder_prompt_template | llm.bind_tools(
     tools=[AnswerQuestion], tool_choice="AnswerQuestion"
 )
 
-revise_instructions = """Revise your previous answer using the new information.
-    - You should use the previous critique to add important information to your answer.
-        - You MUST include numerical citations in your revised answer to ensure it can be verified.
-        - Add a "References" section to the bottom of your answer (which does not count towards the word limit). In form of:
-            - [1] https://example.com
-            - [2] https://example.com
-    - You should use the previous critique to remove superfluous information from your answer and make SURE it is not more than 250 words.
+revise_instructions = """Revise your previous answer using the new information from the search results.
+    
+CRITICAL REQUIREMENTS:
+1. Use the search results provided in the previous messages to improve your answer
+2. You MUST extract URLs from the search results and create numbered references
+3. Every factual claim should have a citation [1], [2], etc.
+4. The References section is MANDATORY - do not skip it under any circumstances
 
-    IMPORTANT: You MUST provide references. Always include a references list in your response.
+Format references exactly like this:
+References:
+- [1] https://actual-url-from-search-results.com
+- [2] https://another-url-from-search-results.com
+
+SEARCH RESULTS ARE AVAILABLE IN THE CONVERSATION ABOVE - USE THEM TO CREATE REFERENCES.
+
+Additional instructions:
+- You should use the previous critique to add important information to your answer.
+- You should use the previous critique to remove superfluous information from your answer and make SURE it is not more than 250 words.
 """
 
 revisor = actor_prompt_template.partial(
