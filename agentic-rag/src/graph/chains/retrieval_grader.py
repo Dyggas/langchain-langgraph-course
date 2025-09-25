@@ -1,8 +1,14 @@
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_openai import AzureChatOpenAI
 from pydantic import BaseModel, Field
+import os
 
-llm = AzureChatOpenAI(temperature=0)
+llm = AzureChatOpenAI(
+    azure_deployment=os.getenv("AZURE_OPENAI_CHAT_DEPLOYMENT"),
+    api_version=os.getenv("AZURE_OPENAI_API_VERSION"),
+    azure_endpoint=os.getenv("AZURE_OPENAI_ENDPOINT"),
+    temperature=0
+)
 
 class GradeDocuments(BaseModel):
     """Binary score for relevance check on retrieved documents."""
