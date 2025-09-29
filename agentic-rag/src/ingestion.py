@@ -37,8 +37,12 @@ def _get_vectorstore():
     return vectorstore
 
 retriever = None
+vectorstore = None
+
 def get_retriever():
     global retriever
+    global vectorstore
+    vectorstore = _get_vectorstore()
     if retriever is None:
-        retriever = _get_vectorstore().as_retriever()
+        retriever = vectorstore.as_retriever()
     return retriever
