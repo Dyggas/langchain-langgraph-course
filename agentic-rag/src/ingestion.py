@@ -1,6 +1,7 @@
 from dotenv import load_dotenv
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_community.document_loaders import WebBaseLoader
+
 # from langchain_community.vectorstores import Chroma
 from langchain_chroma import Chroma
 from langchain_openai import AzureOpenAIEmbeddings
@@ -18,10 +19,10 @@ docs = [WebBaseLoader(url).load() for url in urls]
 docs_list = [item for sublist in docs for item in sublist]
 
 text_splitter = RecursiveCharacterTextSplitter.from_tiktoken_encoder(
-    chunk_size=250, 
-    chunk_overlap=10
+    chunk_size=250, chunk_overlap=10
 )
 doc_splits = text_splitter.split_documents(docs_list)
+
 
 def _get_vectorstore():
     vectorstore = Chroma.from_documents(
@@ -32,12 +33,14 @@ def _get_vectorstore():
             azure_deployment=os.getenv("AZURE_OPENAI_EMBED_DEPLOYMENT"),
             api_version=os.getenv("AZURE_OPENAI_API_VERSION"),
             azure_endpoint=os.getenv("AZURE_OPENAI_ENDPOINT"),
-        )
+        ),
     )
     return vectorstore
 
+
 retriever = None
 vectorstore = None
+
 
 def get_retriever():
     global retriever

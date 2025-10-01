@@ -10,6 +10,7 @@ from graph.chains.router import question_router, RouteQuery
 
 load_dotenv()
 
+
 def decide_to_generate(state: GraphState) -> str:
     print("---DECIDING NEXT STEP: ACCESSING DOCUMENTS---")
     if state["web_search"]:
@@ -18,14 +19,15 @@ def decide_to_generate(state: GraphState) -> str:
     else:
         print("----DECISION: DOCUMENTS ARE RELEVANT, GENERATE ANSWER----")
         return GENERATE
-    
+
+
 def grade_generation_grounded_in_documents_and_question(state: GraphState) -> str:
     print("---CHECK HALLUCINATIONS---")
     question = state["question"]
     documents = state["documents"]
     generation = state["generation"]
 
-    hallucination_score: GradeHallucinations = hallucination_grader.invoke( # type: ignore
+    hallucination_score: GradeHallucinations = hallucination_grader.invoke(  # type: ignore
         {"documents": documents, "generation": generation}
     )
 
@@ -44,7 +46,8 @@ def grade_generation_grounded_in_documents_and_question(state: GraphState) -> st
     else:
         print("---DECISION: GENERATION IS NOT GROUNDED IN DOCUMENTS, RE-TRY---")
         return "not supported"
-    
+
+
 def route_question(state: GraphState) -> str:
     print("---ROUTE QUESTION---")
     question = state["question"]
@@ -58,7 +61,8 @@ def route_question(state: GraphState) -> str:
     else:
         print("---UNDEFINED BEHAVIOUR - FATAL ERROR---")
         return "undefined"
-    
+
+
 workflow = StateGraph(GraphState)
 workflow.add_node(RETRIEVE, retrieve)
 workflow.add_node(GENERATE, generate)
@@ -66,12 +70,7 @@ workflow.add_node(WEBSEARCH, web_search)
 workflow.add_node(GRADE_DOCUMENTS, grade_documents)
 
 workflow.set_conditional_entry_point(
-    route_question,
-    {
-        WEBSEARCH : WEBSEARCH,
-        RETRIEVE : RETRIEVE,
-        "undefined": END
-    }
+    route_question, {WEBSEARCH: WEBSEARCH, RETRIEVE: RETRIEVE, "undefined": END}
 )
 workflow.add_edge(RETRIEVE, GRADE_DOCUMENTS)
 workflow.add_conditional_edges(
@@ -85,14 +84,10 @@ workflow.add_conditional_edges(
 workflow.add_conditional_edges(
     GENERATE,
     grade_generation_grounded_in_documents_and_question,
-    {
-        "not supported": GENERATE,
-        "useful": END,
-        "not useful": WEBSEARCH
-    }
+    {"not supported": GENERATE, "useful": END, "not useful": WEBSEARCH},
 )
 workflow.add_edge(WEBSEARCH, GENERATE)
-workflow.add_edge(GENERATE, END) 
+workflow.add_edge(GENERATE, END)
 
 app = workflow.compile()
 

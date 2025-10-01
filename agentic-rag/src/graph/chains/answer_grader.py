@@ -11,6 +11,7 @@ class GradeAnswer(BaseModel):
         description="Answer addresses the question, 'yes' or 'no'"
     )
 
+
 llm = AzureChatOpenAI(
     azure_deployment=os.getenv("AZURE_OPENAI_CHAT_DEPLOYMENT"),
     api_version=os.getenv("AZURE_OPENAI_API_VERSION"),
@@ -29,4 +30,4 @@ answer_prompt = ChatPromptTemplate.from_messages(
     ]
 )
 
-answer_grader: RunnableSequence = answer_prompt | structured_llm_grader # type: ignore
+answer_grader: RunnableSequence = answer_prompt | structured_llm_grader  # type: ignore

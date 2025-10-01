@@ -23,10 +23,12 @@ def web_search(state: GraphState) -> Dict[str, Any]:
     print("---PERFORMING WEB SEARCH---")
     question = state["question"]
     search_results = web_search_tool.invoke({"query": question})["results"]
-    joined_results = "\n".join([result["content"]for result in search_results])
+    joined_results = "\n".join([result["content"] for result in search_results])
     documents = []
     for result in search_results:
-        doc = Document(page_content=result["snippet"], metadata={"source": result["link"]})
+        doc = Document(
+            page_content=result["snippet"], metadata={"source": result["link"]}
+        )
         documents.append(doc)
     web_results = Document(page_content=joined_results)
     if documents is not None:
@@ -35,6 +37,7 @@ def web_search(state: GraphState) -> Dict[str, Any]:
         documents = [web_results]
 
     return {"documents": documents, "question": question, "web_search": False}
+
 
 # if __name__ == "__main__":
 #     test_state = GraphState(question="What is prompt engineering?", generation="", web_search=True, documents=[])

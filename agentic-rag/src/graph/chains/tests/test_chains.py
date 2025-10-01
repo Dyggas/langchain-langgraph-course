@@ -6,8 +6,7 @@ load_dotenv()
 
 
 from graph.chains.generation import generation_chain
-from graph.chains.hallucination_grader import (GradeHallucinations,
-                                               hallucination_grader)
+from graph.chains.hallucination_grader import GradeHallucinations, hallucination_grader
 from graph.chains.retrieval_grader import GradeDocuments, retrieval_grader
 from graph.chains.router import RouteQuery, question_router
 from ingestion import get_retriever
@@ -21,9 +20,7 @@ def test_retrival_grader_answer_yes() -> None:
 
     print(f"doc_txt: {doc_txt}\n\n")
 
-    res = retrieval_grader.invoke(
-        {"question": question, "document": doc_txt}
-    )
+    res = retrieval_grader.invoke({"question": question, "document": doc_txt})
 
     res_model: GradeDocuments = GradeDocuments.model_validate(res)
 
@@ -63,7 +60,7 @@ def test_hallucination_grader_answer_yes() -> None:
     res: GradeHallucinations = hallucination_grader.invoke(
         {"documents": docs, "generation": generation}
     )
-    assert res.binary_score 
+    assert res.binary_score
 
 
 def test_hallucination_grader_answer_no() -> None:
@@ -75,8 +72,8 @@ def test_hallucination_grader_answer_no() -> None:
             "documents": docs,
             "generation": "In order to make pizza we need to first start with the dough",
         }
-    ) 
-    assert not res.binary_score 
+    )
+    assert not res.binary_score
 
 
 def test_router_to_vectorstore() -> None:

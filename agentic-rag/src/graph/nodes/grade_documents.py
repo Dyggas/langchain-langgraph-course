@@ -3,6 +3,7 @@ from typing import Any, Dict
 from graph.state import GraphState
 from graph.chains.retrieval_grader import retrieval_grader
 
+
 def grade_documents(state: GraphState) -> Dict[str, Any]:
     """
     Determines whether the retrieved documents are relevant to the question
@@ -22,8 +23,10 @@ def grade_documents(state: GraphState) -> Dict[str, Any]:
     filtered_docs = []
     web_search = False
     for doc in documents:
-        score = retrieval_grader.invoke({"question": question, "document": doc.page_content})
-        grade = score.binary_score # type: ignore
+        score = retrieval_grader.invoke(
+            {"question": question, "document": doc.page_content}
+        )
+        grade = score.binary_score  # type: ignore
         if grade.lower() == "yes":
             print("----GRADE: DOCUMENT REVELANT----")
             filtered_docs.append(doc)

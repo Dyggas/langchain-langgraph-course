@@ -13,6 +13,7 @@ llm = AzureChatOpenAI(
     temperature=0,
 )
 
+
 class RouteQuery(BaseModel):
     """Route a user query to the most relevant datasource."""
 
@@ -20,6 +21,7 @@ class RouteQuery(BaseModel):
         ...,
         description="Given a user question, decide whether to route it to the vectorstore or websearch to answer the question. ",
     )
+
 
 structured_llm_router = llm.with_structured_output(RouteQuery)
 
@@ -34,4 +36,4 @@ route_prompt = ChatPromptTemplate.from_messages(
     ]
 )
 
-question_router: RunnableSequence = route_prompt | structured_llm_router # type: ignore
+question_router: RunnableSequence = route_prompt | structured_llm_router  # type: ignore
