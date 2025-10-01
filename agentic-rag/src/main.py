@@ -8,7 +8,7 @@ from graph.graph import app
 if __name__== "__main__":
     print("Hello RAG")
     initial_state = GraphState(
-        question="What is agent memory?",
+        question="How do you make pizza?",
         generation="",
         web_search=True,
         documents=[],

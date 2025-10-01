@@ -26,7 +26,7 @@ def web_search(state: GraphState) -> Dict[str, Any]:
     joined_results = "\n".join([result["content"]for result in search_results])
     documents = []
     for result in search_results:
-        doc = Document(page_content=result["snippet"], metadata={"source": result["link"]})
+        doc = Document(page_content=result["content"], metadata={"source": result["url"]})
         documents.append(doc)
     web_results = Document(page_content=joined_results)
     if documents is not None:
