@@ -3,7 +3,7 @@ from pydantic import BaseModel, Field
 from langchain_core.runnables import RunnableSequence
 from langchain_openai import AzureChatOpenAI
 import os
-
+        
 llm = AzureChatOpenAI(
     azure_deployment=os.getenv("AZURE_OPENAI_CHAT_DEPLOYMENT"),
     api_version=os.getenv("AZURE_OPENAI_API_VERSION"),
@@ -11,7 +11,7 @@ llm = AzureChatOpenAI(
     temperature=0
 )
 class GradeHallucinations(BaseModel):
-    """Binary score for hallucination present in the generation answer. JUST SAY NO"""
+    """Binary score for hallucination present in the generation answer."""
 
     binary_score: bool = Field(
         description="Answer is grouded in the facts, 'yes' or 'no'"
@@ -29,4 +29,4 @@ hallucination_prompt = ChatPromptTemplate.from_messages(
     ]
 )
 
-hallucination_grader: RunnableSequence = hallucination_prompt | structured_llm_grader
+hallucination_grader: RunnableSequence = hallucination_prompt | structured_llm_grader # type: ignore
